@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<section class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">Teacher Dashboard</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">Class Performance</h3>
+            <canvas id="classPerformanceChart"></canvas>
+        </div>
+        <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-6">At-Risk Students</h3>
+            <ul>
+                <li>Student A</li>
+                <li>Student B</li>
+            </ul>
+        </div>
+    </div>
+</section>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const ctx = document.getElementById('classPerformanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Class A', 'Class B', 'Class C'],
+                datasets: [{
+                    label: 'Average Score',
+                    data: [78, 82, 75],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(153, 102, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

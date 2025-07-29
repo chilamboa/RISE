@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RISE{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .header-bg {
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <header class="header-bg text-white p-4 flex items-center justify-between shadow-md">
+        <div>
+            <h1 class="text-2xl font-extrabold leading-none">RISE</h1>
+            <p class="text-md mt-1 font-medium">Results Intelligence & Student Evaluation</p>
+        </div>
+        <nav>
+            <a href="/dashboard" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+            <a href="/parent-dashboard" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Parent</a>
+            <a href="/teacher-dashboard" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Teacher</a>
+            <a href="/school-admin-dashboard" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">School Admin</a>
+            <a href="/student-management" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Student Management</a>
+            <a href="/user-management" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">User Management</a>
+            <a href="/settings" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+        </nav>
+    </header>
+
+    <main class="flex-1 p-4 md:p-6">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

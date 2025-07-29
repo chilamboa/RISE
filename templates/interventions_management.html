@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE - Interventions Management</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .header-bg {
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+        }
+        .sidebar-bg {
+            background: linear-gradient(to bottom, #6B46C1, #8A2BE2);
+        }
+        .nav-link {
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Align items vertically */
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+        /* Chatbot styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+            transform: scale(0.8); /* Start smaller */
+            opacity: 0; /* Start hidden */
+            pointer-events: none; /* Disable interaction when hidden */
+        }
+        .chatbot-container.open {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .chatbot-header {
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+            color: white;
+            padding: 1rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chatbot-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: #f9fafb;
+        }
+        .chatbot-input-area {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            word-wrap: break-word;
+        }
+        .message-bubble.user {
+            background-color: #e0f2fe; /* Light blue */
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message-bubble.bot {
+            background-color: #f3e8ff; /* Light purple */
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        .chatbot-toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: transform 0.2s ease-in-out;
+        }
+        .chatbot-toggle-button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+    <!-- Header Section (for smaller screens) -->
+    <header class="header-bg text-white p-4 flex items-center justify-between lg:hidden rounded-b-lg shadow-md">
+        <div>
+            <h1 class="text-2xl font-extrabold leading-none">RISE</h1>
+            <p class="text-md mt-1 font-medium">Results Intelligence & Student Evaluation</p>
+        </div>
+        <button id="menuButton" class="text-white focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Sidebar Section -->
+    <aside id="sidebar" class="sidebar-bg text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full lg:relative lg:translate-x-0 transition duration-200 ease-in-out z-50 rounded-r-lg shadow-lg">
+        <div class="flex items-center justify-center px-4">
+            <div class="text-center">
+                <h1 class="text-3xl font-extrabold leading-none">RISE</h1>
+                <p class="text-lg mt-1 font-medium">Results Intelligence & Student Evaluation</p>
+                <p class="text-sm mt-1 font-light">Uplifting and growth-oriented</p>
+            </div>
+        </div>
+
+        <nav>
+            <a href="/dashboard" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-home mr-3"></i>Dashboard</a>
+            <a href="/student-profile/S001" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-user-graduate mr-3"></i>Student Profile (S001)</a>
+            <a href="/student-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-users mr-3"></i>Student Management</a>
+            <a href="/reports" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-chart-line mr-3"></i>Reports & Analytics</a>
+            <a href="/interventions-management" class="block py-2.5 px-4 rounded-md text-white nav-link active"><i class="fas fa-hands-helping mr-3"></i>Interventions</a>
+            <a href="/chatbot" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-robot mr-3"></i>Naledi Chatbot</a>
+            <a href="/user-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-user-cog mr-3"></i>User Management</a>
+            <a href="/settings" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-cog mr-3"></i>Settings</a>
+            <a href="/about" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-info-circle mr-3"></i>About</a>
+            <a href="/privacy-policy" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-shield-alt mr-3"></i>Privacy Policy</a>
+            <button id="logoutButton" class="block w-full text-left py-2.5 px-4 rounded-md text-white nav-link mt-4"><i class="fas fa-sign-out-alt mr-3"></i>Logout</button>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Nav (for larger screens, to complement sidebar) -->
+        <header class="header-bg text-white p-4 hidden lg:flex items-center justify-end shadow-md rounded-bl-lg">
+            <span class="text-lg font-semibold">Welcome, User!</span>
+            <!-- Could add more user specific info or quick links here -->
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Interventions Management</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Manage Intervention Types</h3>
+                <p class="text-gray-700 mb-4">This section allows administrators and educators to manage various lookup tables, including intervention types and their details, which are configurable via database tables.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="interventionName" class="block text-sm font-medium text-gray-700 mb-1">Intervention Name</label>
+                        <input type="text" id="interventionName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm" placeholder="e.g., Tutoring Session">
+                    </div>
+                    <div>
+                        <label for="interventionDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea id="interventionDescription" rows="2" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm" placeholder="Brief description of the intervention"></textarea>
+                    </div>
+                    <div>
+                        <label for="potentialImpact" class="block text-sm font-medium text-gray-700 mb-1">Potential Impact Score (1-10)</label>
+                        <input type="number" id="potentialImpact" min="1" max="10" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm" placeholder="e.g., 7.5">
+                    </div>
+                    <div>
+                        <label for="cost" class="block text-sm font-medium text-gray-700 mb-1">Cost (e.g., in ZAR)</label>
+                        <input type="number" id="cost" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm" placeholder="e.g., 50.00">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end space-x-3">
+                    <button id="addInterventionBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Add Intervention</button>
+                    <button id="updateInterventionBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Update Intervention</button>
+                    <button id="deleteInterventionBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Delete Intervention</button>
+                </div>
+                <div id="managementMessageBox" class="text-center text-sm mt-4 hidden"></div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Available Interventions</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Impact</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="interventionListTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Intervention data will be loaded here -->
+                            <tr><td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Loading interventions...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <div id="chatbotToggleButton" class="chatbot-toggle-button">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div id="chatbotContainer" class="chatbot-container hidden">
+        <div class="chatbot-header">
+            <h3 class="text-lg font-semibold">Naledi Chatbot</h3>
+            <button id="closeChatbotButton" class="text-white focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="chatbotMessages" class="chatbot-messages flex flex-col">
+            <!-- Chat messages will appear here -->
+            <div class="message-bubble bot">Hello! I'm Naledi, your AI assistant. How can I help you today?</div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbotInput" placeholder="Type your message..."
+                   class="flex-grow px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+            <button id="chatbotSendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-semibold">
+                Send
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar for mobile
+        const menuButton = document.getElementById('menuButton');
+        const sidebar = document.getElementById('sidebar');
+
+        menuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Close sidebar when clicking outside on small screens
+        document.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !menuButton.contains(event.target) && window.innerWidth < 1024) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            window.location.href = '/'; // Redirect to home/login page
+        });
+
+        // --- Chatbot Functionality ---
+        const chatbotToggleButton = document.getElementById('chatbotToggleButton');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const closeChatbotButton = document.getElementById('closeChatbotButton');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSendButton = document.getElementById('chatbotSendButton');
+
+        let currentUserRole = "Administrator"; // Assuming Admin/Educator view for this page
+
+        chatbotToggleButton.addEventListener('click', () => {
+            chatbotContainer.classList.toggle('hidden');
+            chatbotContainer.classList.toggle('open');
+            if (!chatbotContainer.classList.contains('hidden')) {
+                chatbotInput.focus();
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+        });
+
+        closeChatbotButton.addEventListener('click', () => {
+            chatbotContainer.classList.add('hidden');
+            chatbotContainer.classList.remove('open');
+        });
+
+        async function sendMessage() {
+            const userMessage = chatbotInput.value.trim();
+            if (userMessage === '') return;
+
+            const userBubble = document.createElement('div');
+            userBubble.className = 'message-bubble user';
+            userBubble.textContent = userMessage;
+            chatbotMessages.appendChild(userBubble);
+            chatbotInput.value = '';
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message-bubble bot typing-indicator';
+            typingIndicator.textContent = 'Naledi is typing...';
+            chatbotMessages.appendChild(typingIndicator);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer dummy_token'
+                    },
+                    body: JSON.stringify({ user_query: userMessage, user_role: currentUserRole })
+                });
+
+                const data = await response.json();
+
+                if (chatbotMessages.contains(typingIndicator)) {
+                    chatbotMessages.removeChild(typingIndicator);
+                }
+
+                const botBubble = document.createElement('div');
+                botBubble.className = 'message-bubble bot';
+                botBubble.textContent = data.response;
+                chatbotMessages.appendChild(botBubble);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            } catch (error) {
+                console.error('Error sending message to chatbot:', error);
+                if (chatbotMessages.contains(typingIndicator)) {
+                    chatbotMessages.removeChild(typingIndicator);
+                }
+                const errorBubble = document.createElement('div');
+                errorBubble.className = 'message-bubble bot text-red-600';
+                errorBubble.textContent = 'Sorry, Naledi is currently unavailable. Please try again later.';
+                chatbotMessages.appendChild(errorBubble);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+        }
+
+        chatbotSendButton.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // --- Interventions Management Specific Functions ---
+        const interventionNameInput = document.getElementById('interventionName');
+        const interventionDescriptionTextarea = document.getElementById('interventionDescription');
+        const potentialImpactInput = document.getElementById('potentialImpact');
+        const costInput = document.getElementById('cost');
+        const addInterventionBtn = document.getElementById('addInterventionBtn');
+        const updateInterventionBtn = document.getElementById('updateInterventionBtn');
+        const deleteInterventionBtn = document.getElementById('deleteInterventionBtn');
+        const managementMessageBox = document.getElementById('managementMessageBox');
+        const interventionListTableBody = document.getElementById('interventionListTableBody');
+
+        let currentInterventionId = null; // To store the ID of the intervention being edited
+
+        function showMessage(message, type = 'success') {
+            managementMessageBox.textContent = message;
+            managementMessageBox.className = `text-center text-sm mt-4 font-semibold ${type === 'success' ? 'text-green-600' : 'text-red-600'}`;
+            managementMessageBox.classList.remove('hidden');
+        }
+
+        async function fetchInterventionList() {
+            interventionListTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Loading interventions...</td></tr>';
+            try {
+                // This API endpoint is already defined in api_routes.py: GET /api/lookup/{table_name}
+                const response = await fetch('/api/lookup/intervention_type_lookup', { headers: { 'Authorization': 'Bearer dummy_token' } });
+                if (!response.ok) throw new Error('Failed to fetch intervention list');
+                const interventions = await response.json();
+
+                interventionListTableBody.innerHTML = '';
+                if (interventions.length > 0) {
+                    interventions.forEach(intervention => {
+                        const row = interventionListTableBody.insertRow();
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${intervention.id}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${intervention.name}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${intervention.description}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${intervention.potential_impact_score || 'N/A'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">R ${intervention.cost ? intervention.cost.toFixed(2) : '0.00'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button onclick="editIntervention(${intervention.id}, '${intervention.name}', '${intervention.description}', ${intervention.potential_impact_score}, ${intervention.cost})" class="text-indigo-600 hover:text-indigo-900 mr-2">Edit</button>
+                                <button onclick="confirmDeleteIntervention(${intervention.id})" class="text-red-600 hover:text-red-900">Delete</button>
+                            </td>
+                        `;
+                    });
+                } else {
+                    interventionListTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">No interventions found.</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error fetching intervention list:', error);
+                showMessage('Error loading intervention list.', 'error');
+                interventionListTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 whitespace-nowrap text-sm text-red-500">Error loading interventions.</td></tr>';
+            }
+        }
+
+        function editIntervention(id, name, description, impact, cost) {
+            currentInterventionId = id;
+            interventionNameInput.value = name;
+            interventionDescriptionTextarea.value = description;
+            potentialImpactInput.value = impact;
+            costInput.value = cost;
+            showMessage(`Editing intervention: ${name}`, 'success');
+        }
+
+        function confirmDeleteIntervention(id) {
+            // Using a custom modal/message box instead of confirm()
+            // For simplicity, this example still uses a direct call, but in a real app,
+            // you'd trigger a custom modal here.
+            if (window.confirm(`Are you sure you want to delete intervention ID ${id}? This action cannot be undone.`)) {
+                deleteIntervention(id);
+            }
+        }
+
+        async function addIntervention() {
+            const interventionData = {
+                name: interventionNameInput.value,
+                description: interventionDescriptionTextarea.value,
+                potential_impact_score: parseFloat(potentialImpactInput.value),
+                cost: parseFloat(costInput.value)
+            };
+            if (!interventionData.name || !interventionData.description || isNaN(interventionData.potential_impact_score) || isNaN(interventionData.cost)) {
+                showMessage('Please fill all intervention fields.', 'error');
+                return;
+            }
+
+            try {
+                // This API endpoint is already defined in api_routes.py: POST /api/lookup/{table_name}/add
+                const response = await fetch('/api/lookup/intervention_type_lookup/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer dummy_token' },
+                    body: JSON.stringify(interventionData)
+                });
+                if (!response.ok) throw new Error('Failed to add intervention');
+                const result = await response.json();
+                showMessage(`Intervention "${interventionData.name}" added successfully!`, 'success');
+                fetchInterventionList(); // Refresh list
+                clearForm();
+            } catch (error) {
+                console.error('Error adding intervention:', error);
+                showMessage(`Error adding intervention: ${error.message}`, 'error');
+            }
+        }
+
+        async function updateIntervention() {
+            if (currentInterventionId === null) {
+                showMessage('Please select an intervention to update.', 'error');
+                return;
+            }
+            const interventionData = {
+                id: currentInterventionId, // Include ID for update
+                name: interventionNameInput.value,
+                description: interventionDescriptionTextarea.value,
+                potential_impact_score: parseFloat(potentialImpactInput.value),
+                cost: parseFloat(costInput.value)
+            };
+            if (!interventionData.name || !interventionData.description || isNaN(interventionData.potential_impact_score) || isNaN(interventionData.cost)) {
+                showMessage('Please fill all intervention fields.', 'error');
+                return;
+            }
+
+            try {
+                // You would need to add a PUT /api/lookup/{table_name}/update endpoint in api_routes.py
+                // For now, simulating success.
+                // const response = await fetch(`/api/lookup/intervention_type_lookup/update`, {
+                //     method: 'PUT', // Or PATCH
+                //     headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer dummy_token' },
+                //     body: JSON.stringify(interventionData)
+                // });
+                // if (!response.ok) throw new Error('Failed to update intervention');
+                // const result = await response.json();
+                showMessage(`Intervention "${interventionData.name}" updated successfully! (Simulated)`, 'success');
+                fetchInterventionList(); // Refresh list
+                clearForm();
+            } catch (error) {
+                console.error('Error updating intervention:', error);
+                showMessage(`Error updating intervention: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteIntervention(id) {
+            try {
+                // You would need to add a DELETE /api/lookup/{table_name}/{id} endpoint in api_routes.py
+                // For now, simulating success.
+                // const response = await fetch(`/api/lookup/intervention_type_lookup/${id}`, {
+                //     method: 'DELETE',
+                //     headers: { 'Authorization': 'Bearer dummy_token' }
+                // });
+                // if (!response.ok) throw new Error('Failed to delete intervention');
+                // const result = await response.json();
+                showMessage(`Intervention ID ${id} deleted successfully! (Simulated)`, 'success');
+                fetchInterventionList(); // Refresh list
+                clearForm();
+            } catch (error) {
+                console.error('Error deleting intervention:', error);
+                showMessage(`Error deleting intervention: ${error.message}`, 'error');
+            }
+        }
+
+        function clearForm() {
+            currentInterventionId = null;
+            interventionNameInput.value = '';
+            interventionDescriptionTextarea.value = '';
+            potentialImpactInput.value = '';
+            costInput.value = '';
+            managementMessageBox.classList.add('hidden');
+        }
+
+        addInterventionBtn.addEventListener('click', addIntervention);
+        updateInterventionBtn.addEventListener('click', updateIntervention);
+        deleteInterventionBtn.addEventListener('click', confirmDeleteIntervention);
+
+        // Initial load
+        document.addEventListener('DOMContentLoaded', fetchInterventionList);
+    </script>
+</body>
+</html>

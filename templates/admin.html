@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE - Admin</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .header-bg {
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="header-bg text-white p-4 flex items-center justify-between shadow-md">
+        <div>
+            <h1 class="text-2xl font-extrabold leading-none">RISE</h1>
+            <p class="text-md mt-1 font-medium">Results Intelligence & Student Evaluation</p>
+        </div>
+        <nav>
+            <a href="/dashboard" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+            <a href="/student-management" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Student Management</a>
+            <a href="/user-management" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">User Management</a>
+            <a href="/settings" class="text-white hover:text-gray-200 px-3 py-2 rounded-md text-sm font-medium">Settings</a>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-4 md:p-6">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Admin Panel</h2>
+
+            <!-- Data Generation Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Data Generation Controls</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="numSchools" class="block text-sm font-medium text-gray-700 mb-1">Number of Schools</label>
+                        <input type="number" id="numSchools" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="numParents" class="block text-sm font-medium text-gray-700 mb-1">Number of Parents</label>
+                        <input type="number" id="numParents" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="numStudents" class="block text-sm font-medium text-gray-700 mb-1">Number of Students</label>
+                        <input type="number" id="numStudents" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button id="updateDataGenerationBtn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Update Settings</button>
+                </div>
+            </div>
+
+            <!-- Database Actions Section -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Database Actions</h3>
+                <div class="flex space-x-4">
+                    <button id="createTablesBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Create Tables</button>
+                    <button id="insertDataBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Insert Sample Data</button>
+                    <button id="generateAllDataBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">Generate All Data</button>
+                </div>
+            </div>
+
+            <div id="messageBox" class="text-center text-sm mt-4 hidden"></div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const numSchoolsInput = document.getElementById('numSchools');
+            const numParentsInput = document.getElementById('numParents');
+            const numStudentsInput = document.getElementById('numStudents');
+            const updateDataGenerationBtn = document.getElementById('updateDataGenerationBtn');
+            const createTablesBtn = document.getElementById('createTablesBtn');
+            const insertDataBtn = document.getElementById('insertDataBtn');
+            const generateAllDataBtn = document.getElementById('generateAllDataBtn');
+            const messageBox = document.getElementById('messageBox');
+
+            // Function to show messages
+            function showMessage(message, type = 'success') {
+                messageBox.textContent = message;
+                messageBox.className = `text-center text-sm mt-4 font-semibold ${type === 'success' ? 'text-green-600' : 'text-red-600'}`;
+                messageBox.classList.remove('hidden');
+            }
+
+            // Fetch initial config values
+            async function fetchConfig() {
+                try {
+                    const response = await fetch('/api/config');
+                    const config = await response.json();
+                    numSchoolsInput.value = config.DATA_GENERATION.num_schools;
+                    numParentsInput.value = config.DATA_GENERATION.num_parents;
+                    numStudentsInput.value = config.DATA_GENERATION.total_unique_students;
+                } catch (error) {
+                    showMessage('Error fetching configuration.', 'error');
+                }
+            }
+
+            // Update data generation settings
+            updateDataGenerationBtn.addEventListener('click', async function() {
+                const updates = [
+                    { section: 'DATA_GENERATION', key: 'num_schools', value: numSchoolsInput.value },
+                    { section: 'DATA_GENERATION', key: 'num_parents', value: numParentsInput.value },
+                    { section: 'DATA_GENERATION', key: 'total_unique_students', value: numStudentsInput.value }
+                ];
+
+                try {
+                    for (const update of updates) {
+                        const response = await fetch('/api/config/update', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(update)
+                        });
+                        if (!response.ok) {
+                            throw new Error(`Failed to update ${update.key}`);
+                        }
+                    }
+                    showMessage('Data generation settings updated successfully!', 'success');
+                } catch (error) {
+                    showMessage(`Error updating settings: ${error.message}`, 'error');
+                }
+            });
+
+            // Database actions
+            createTablesBtn.addEventListener('click', async function() {
+                try {
+                    const response = await fetch('/api/db/execute-script/drop_create', { method: 'POST' });
+                    const result = await response.json();
+                    if (response.ok) {
+                        showMessage(result.message, 'success');
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    showMessage(`Error creating tables: ${error.message}`, 'error');
+                }
+            });
+
+            insertDataBtn.addEventListener('click', async function() {
+                try {
+                    const response = await fetch('/api/db/execute-script/insert_data', { method: 'POST' });
+                    const result = await response.json();
+                    if (response.ok) {
+                        showMessage(result.message, 'success');
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    showMessage(`Error inserting data: ${error.message}`, 'error');
+                }
+            });
+
+            generateAllDataBtn.addEventListener('click', async function() {
+                try {
+                    const response = await fetch('/api/generate/all', { method: 'POST' });
+                    const result = await response.json();
+                    if (response.ok) {
+                        showMessage(result.message, 'success');
+                    } else {
+                        throw new Error(result.error);
+                    }
+                } catch (error) {
+                    showMessage(`Error generating data: ${error.message}`, 'error');
+                }
+            });
+
+            // Initial load
+            fetchConfig();
+        });
+    </script>
+</body>
+</html>
