@@ -1,0 +1,17 @@
+fastapi 
+dotenv 
+utils 
+config 
+typing 
+pydantic 
+configparser 
+pyodbc 
+scikit-learn 
+data_preprocessing 
+joblib 
+pandas
+numpy
+optuna
+gymnasium
+logging
+stable-baselines3

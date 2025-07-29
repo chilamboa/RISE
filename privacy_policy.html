@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto">
+    <header class="mb-8">
+        <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-2">Privacy Policy</h2>
+        <p class="text-gray-600 dark:text-gray-400">Last updated: July 1, 2025</p>
+    </header>
+
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700 transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div class="prose dark:prose-invert max-w-none">
+            <h3>Introduction</h3>
+            <p>RISE ("we", "our", "us") is committed to protecting the privacy and security of your personal information. This Privacy Policy describes how we collect, use, store, and share information when you use our platform. We respect your privacy and are committed to protecting it through our compliance with this policy.</p>
+            
+            <h3>Information We Collect</h3>
+            <p>We collect several types of information from and about users of our platform, including:</p>
+            <ul>
+                <li><strong>Personal Information:</strong> We may collect personal information such as name, email address, and other contact details when you register for an account.</li>
+                <li><strong>Usage Data:</strong> We collect information about how you interact with our platform, including login history, features used, and time spent on various pages.</li>
+                <li><strong>Student Information:</strong> For educational institutions, we process student academic data, including grades, attendance records, and assessment results.</li>
+                <li><strong>Analytics Data:</strong> We collect anonymized data for analytical purposes to improve our services and user experience.</li>
+            </ul>
+            
+            <h3>How We Use Your Information</h3>
+            <p>We use the information we collect for various purposes, including:</p>
+            <ul>
+                <li>To provide, operate, and maintain our platform</li>
+                <li>To improve, personalize, and expand our platform</li>
+                <li>To understand and analyze how you use our platform</li>
+                <li>To develop new products, services, features, and functionality</li>
+                <li>To communicate with you, either directly or through our partners</li>
+                <li>To generate predictive analytics for educational purposes</li>
+                <li>To comply with legal obligations</li>
+            </ul>
+            
+            <h3>Data Security</h3>
+            <p>We implement a variety of security measures to maintain the safety of your personal information when you enter, submit, or access your personal information. These include:</p>
+            <ul>
+                <li>Encryption of sensitive data both in transit and at rest</li>
+                <li>Regular security assessments and penetration testing</li>
+                <li>Role-based access controls</li>
+                <li>Regular data backups</li>
+                <li>Staff training on data protection and privacy</li>
+            </ul>
+            
+            <h3>Data Sharing and Disclosure</h3>
+            <p>We may share your information in the following situations:</p>
+            <ul>
+                <li><strong>With Service Providers:</strong> We may share your information with third-party vendors, consultants, and other service providers who perform services on our behalf.</li>
+                <li><strong>For Legal Compliance:</strong> We may disclose your information if required to do so by law or in response to valid requests by public authorities.</li>
+                <li><strong>With Your Consent:</strong> We may share your information with your consent or as otherwise disclosed at the time of data collection or sharing.</li>
+            </ul>
+            
+            <h3>Your Rights</h3>
+            <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
+            <ul>
+                <li>The right to access personal information we hold about you</li>
+                <li>The right to request correction of your personal information</li>
+                <li>The right to request deletion of your personal information</li>
+                <li>The right to object to processing of your personal information</li>
+                <li>The right to data portability</li>
+                <li>The right to withdraw consent</li>
+            </ul>
+            
+            <h3>Cookies and Tracking Technologies</h3>
+            <p>We use cookies and similar tracking technologies to track activity on our platform and hold certain information. Cookies are files with small amount of data which may include an anonymous unique identifier. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.</p>
+            
+            <h3>Children's Privacy</h3>
+            <p>Our platform is designed for use by educational institutions and contains student data, including data about minors. We comply with applicable laws regarding the protection of children's data, including the Protection of Personal Information Act (POPIA) in South Africa. We only process children's data with appropriate consent from parents or guardians, or as otherwise permitted by law.</p>
+            
+            <h3>Changes to This Privacy Policy</h3>
+            <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date.</p>
+            
+            <h3>Contact Us</h3>
+            <p>If you have any questions about this Privacy Policy, please contact us at:</p>
+            <p>
+                <strong>Email:</strong> privacy@rise-edu.co.za<br>
+                <strong>Phone:</strong> +27 11 555 1234<br>
+                <strong>Address:</strong> 123 Education Drive, Johannesburg South, Gauteng, South Africa
+            </p>
+        </div>
+        
+        <!-- Cookie Consent Banner -->
+        <div class="mt-8 bg-gray-100 dark:bg-slate-700 rounded-lg p-4 flex flex-col md:flex-row md:items-center justify-between">
+            <div class="mb-4 md:mb-0 md:mr-4">
+                <p class="text-gray-800 dark:text-gray-200 text-sm">
+                    <i class="fas fa-cookie-bite mr-2"></i>
+                    This website uses cookies to ensure you get the best experience on our website.
+                </p>
+            </div>
+            <div class="flex space-x-3">
+                <button class="px-4 py-2 bg-gray-200 dark:bg-slate-600 hover:bg-gray-300 dark:hover:bg-slate-500 text-gray-800 dark:text-white font-medium rounded-md text-sm transition-colors">
+                    Cookie Preferences
+                </button>
+                <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md text-sm transition-colors">
+                    Accept All Cookies
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

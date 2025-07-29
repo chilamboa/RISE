@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}About/Help/Contact{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto">
+    <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6">About, Help & Contact</h2>
+    
+    <div class="bg-white dark:bg-slate-800 p-6 rounded-lg shadow-md mb-8 transition-colors duration-300 animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4">About RISE - Results Intelligence & Student Evaluation</h3>
+        <div class="prose dark:prose-invert max-w-none">
+            <p class="text-gray-700 dark:text-gray-300 mb-4">RISE is a predictive analytics platform designed to forecast student academic performance in South African schools. Our mission is to leverage machine learning to identify at-risk learners, enabling targeted interventions and improved educational outcomes. We support the goals of the National Development Plan (NDP) 2030 and address systemic challenges such as dropout rates, inequality, and resource allocation.</p>
+            <p class="text-gray-700 dark:text-gray-300 mb-4">The platform integrates historical and contemporary educational data, stakeholder insights, and ethical frameworks to ensure a commercially viable and socially impactful solution. We are committed to data privacy, fairness, transparency, and accountability in all our operations.</p>
+        </div>
+        
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 mt-8">Help & Support</h3>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">If you encounter any issues or have questions about using the platform, please refer to the following resources:</p>
+        
+        <ul class="space-y-3 list-disc list-inside text-gray-700 dark:text-gray-300 ml-4 mb-6">
+            <li class="flex items-start">
+                <span class="inline-flex items-center justify-center mr-2 flex-shrink-0">
+                    <i class="fas fa-robot text-purple-600 dark:text-purple-400"></i>
+                </span>
+                <span><strong class="font-medium">Naledi Chatbot:</strong> For immediate answers to common questions, use the Naledi chatbot available on most pages (look for the purple chat icon).</span>
+            </li>
+            <li class="flex items-start">
+                <span class="inline-flex items-center justify-center mr-2 flex-shrink-0">
+                    <i class="fas fa-book text-purple-600 dark:text-purple-400"></i>
+                </span>
+                <span><strong class="font-medium">User Manual/Documentation:</strong> <a href="#" class="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 underline">View documentation</a> - Comprehensive guides on all features and functionalities.</span>
+            </li>
+            <li class="flex items-start">
+                <span class="inline-flex items-center justify-center mr-2 flex-shrink-0">
+                    <i class="fas fa-question-circle text-purple-600 dark:text-purple-400"></i>
+                </span>
+                <span><strong class="font-medium">FAQs Section:</strong> <a href="#" class="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 underline">View FAQs</a> - A collection of frequently asked questions.</span>
+            </li>
+        </ul>
+
+        <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 mt-8">Contact Us</h3>
+        <p class="text-gray-700 dark:text-gray-300 mb-4">For further assistance or specific inquiries, please reach out to our support team:</p>
+        
+        <div class="grid md:grid-cols-2 gap-6 mt-6">
+            <div class="bg-gray-50 dark:bg-slate-700 p-4 rounded-lg border border-gray-100 dark:border-slate-600 transition-colors">
+                <h4 class="font-medium mb-3 flex items-center text-gray-900 dark:text-gray-100">
+                    <i class="fas fa-envelope mr-2 text-purple-600 dark:text-purple-400"></i> Email
+                </h4>
+                <a href="mailto:support@rise-edu.co.za" class="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 font-medium">support@rise-edu.co.za</a>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-slate-700 p-4 rounded-lg border border-gray-100 dark:border-slate-600 transition-colors">
+                <h4 class="font-medium mb-3 flex items-center text-gray-900 dark:text-gray-100">
+                    <i class="fas fa-phone mr-2 text-purple-600 dark:text-purple-400"></i> Phone
+                </h4>
+                <p class="text-gray-700 dark:text-gray-300">+27 11 555 1234</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Monday - Friday, 8:00 AM - 4:00 PM SAST</p>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-slate-700 p-4 rounded-lg border border-gray-100 dark:border-slate-600 transition-colors md:col-span-2">
+                <h4 class="font-medium mb-3 flex items-center text-gray-900 dark:text-gray-100">
+                    <i class="fas fa-map-marker-alt mr-2 text-purple-600 dark:text-purple-400"></i> Address
+                </h4>
+                <p class="text-gray-700 dark:text-gray-300">123 Education Drive, Johannesburg South, Gauteng, South Africa</p>
+            </div>
+        </div>
+        
+        <!-- Contact Form -->
+        <div class="mt-10 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <h4 class="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4">Send Us a Message</h4>
+            <form class="space-y-4">
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Your name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-slate-700 dark:text-white transition-colors">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Your email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-slate-700 dark:text-white transition-colors">
+                    </div>
+                </div>
+                <div>
+                    <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+                    <input type="text" id="subject" name="subject" placeholder="Message subject" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-slate-700 dark:text-white transition-colors">
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
+                    <textarea id="message" name="message" rows="4" placeholder="Your message" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-slate-700 dark:text-white transition-colors"></textarea>
+                </div>
+                <button type="submit" class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-md shadow-sm transition-colors">
+                    <i class="fas fa-paper-plane mr-2"></i> Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

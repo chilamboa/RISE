@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE - Student Profile</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .header-bg {
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+        }
+        .sidebar-bg {
+            background: linear-gradient(to bottom, #6B46C1, #8A2BE2);
+        }
+        .nav-link {
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            display: flex; /* Make it a flex container */
+            align-items: center; /* Align items vertically */
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.3);
+            font-weight: bold;
+        }
+        /* Chatbot styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
+            transition: all 0.3s ease-in-out;
+            transform: scale(0.8); /* Start smaller */
+            opacity: 0; /* Start hidden */
+            pointer-events: none; /* Disable interaction when hidden */
+        }
+        .chatbot-container.open {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .chatbot-header {
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+            color: white;
+            padding: 1rem;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chatbot-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: #f9fafb;
+        }
+        .chatbot-input-area {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            word-wrap: break-word;
+        }
+        .message-bubble.user {
+            background-color: #e0f2fe; /* Light blue */
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .message-bubble.bot {
+            background-color: #f3e8ff; /* Light purple */
+            align-self: flex-start;
+            margin-right: auto;
+        }
+        .chatbot-toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #6B46C1, #8A2BE2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: transform 0.2s ease-in-out;
+        }
+        .chatbot-toggle-button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+    <!-- Header Section (for smaller screens) -->
+    <header class="header-bg text-white p-4 flex items-center justify-between lg:hidden rounded-b-lg shadow-md">
+        <div>
+            <h1 class="text-2xl font-extrabold leading-none">RISE</h1>
+            <p class="text-md mt-1 font-medium">Results Intelligence & Student Evaluation</p>
+        </div>
+        <button id="menuButton" class="text-white focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Sidebar Section -->
+    <aside id="sidebar" class="sidebar-bg text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform -translate-x-full lg:relative lg:translate-x-0 transition duration-200 ease-in-out z-50 rounded-r-lg shadow-lg">
+        <div class="flex items-center justify-center px-4">
+            <div class="text-center">
+                <h1 class="text-3xl font-extrabold leading-none">RISE</h1>
+                <p class="text-lg mt-1 font-medium">Results Intelligence & Student Evaluation</p>
+                <p class="text-sm mt-1 font-light">Uplifting and growth-oriented</p>
+            </div>
+        </div>
+
+        <nav>
+            <a href="/dashboard" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-home mr-3"></i>Dashboard</a>
+            <a href="/student-profile/S001" class="block py-2.5 px-4 rounded-md text-white nav-link active"><i class="fas fa-user-graduate mr-3"></i>Student Profile (S001)</a>
+            <a href="/student-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-users mr-3"></i>Student Management</a>
+            <a href="/reports" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-chart-line mr-3"></i>Reports & Analytics</a>
+            <a href="/interventions-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-hands-helping mr-3"></i>Interventions</a>
+            <a href="/chatbot" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-robot mr-3"></i>Naledi Chatbot</a>
+            <a href="/user-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-user-cog mr-3"></i>User Management</a>
+            <a href="/settings" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-cog mr-3"></i>Settings</a>
+            <a href="/about" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-info-circle mr-3"></i>About</a>
+            <a href="/privacy-policy" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-shield-alt mr-3"></i>Privacy Policy</a>
+            <button id="logoutButton" class="block w-full text-left py-2.5 px-4 rounded-md text-white nav-link mt-4"><i class="fas fa-sign-out-alt mr-3"></i>Logout</button>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Nav (for larger screens, to complement sidebar) -->
+        <header class="header-bg text-white p-4 hidden lg:flex items-center justify-end shadow-md rounded-bl-lg">
+            <span class="text-lg font-semibold">Welcome, User!</span>
+            <!-- Could add more user specific info or quick links here -->
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-4 md:p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Student Profile: <span id="studentName">Loading...</span> (<span id="studentIdDisplay"></span>)</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <!-- Student Info Card -->
+                <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Student Information</h3>
+                    <p class="text-gray-700 mb-2"><strong>Age:</strong> <span id="studentAge"></span></p>
+                    <p class="text-gray-700 mb-2"><strong>Grade Level:</strong> <span id="studentGrade"></span></p>
+                    <p class="text-gray-700 mb-2"><strong>Gender:</strong> <span id="studentGender"></span></p>
+                    <p class="text-gray-700 mb-2"><strong>Home Environment:</strong> <span id="studentHomeEnv"></span></p>
+                    <p class="text-gray-700"><strong>Internet Access:</strong> <span id="studentInternetAccess"></span></p>
+                </div>
+
+                <!-- Prediction Card -->
+                <div class="lg:col-span-2 bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Predicted Performance</h3>
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <p class="text-gray-500 text-sm">Predicted Mark</p>
+                            <p class="text-4xl font-bold text-purple-600" id="predictedMark">--</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm">Confidence</p>
+                            <p class="text-4xl font-bold text-blue-600" id="confidenceScore">--</p>
+                        </div>
+                        <button id="predictButton" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md shadow-md transition duration-200">
+                            Get Prediction
+                        </button>
+                    </div>
+                    <div id="predictionMessageBox" class="text-sm mt-2 hidden"></div>
+                    <h4 class="text-lg font-semibold text-gray-800 mt-6 mb-3">Feature Importance (Explanation)</h4>
+                    <div id="featureImportance" class="bg-gray-50 p-4 rounded-md">
+                        <p class="text-gray-600">Click "Get Prediction" to see feature importance.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Academic Records Table -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Academic Records</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Subject</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mark</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                                </tr>
+                            </thead>
+                            <tbody id="academicRecordsTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- Data will be loaded here by JavaScript -->
+                                <tr><td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">No academic records found.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Attendance Records Table -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Attendance Records</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceRecordsTableBody" class="bg-white divide-y divide-gray-200">
+                                <!-- Data will be loaded here by JavaScript -->
+                                <tr><td colspan="2" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">No attendance records found.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <div id="chatbotToggleButton" class="chatbot-toggle-button">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div id="chatbotContainer" class="chatbot-container hidden">
+        <div class="chatbot-header">
+            <h3 class="text-lg font-semibold">Naledi Chatbot</h3>
+            <button id="closeChatbotButton" class="text-white focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="chatbotMessages" class="chatbot-messages flex flex-col">
+            <!-- Chat messages will appear here -->
+            <div class="message-bubble bot">Hello! I'm Naledi, your AI assistant. How can I help you today?</div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbotInput" placeholder="Type your message..."
+                   class="flex-grow px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+            <button id="chatbotSendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-semibold">
+                Send
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar for mobile
+        const menuButton = document.getElementById('menuButton');
+        const sidebar = document.getElementById('sidebar');
+
+        menuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Close sidebar when clicking outside on small screens
+        document.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !menuButton.contains(event.target) && window.innerWidth < 1024) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            window.location.href = '/'; // Redirect to home/login page
+        });
+
+        // --- Chatbot Functionality (Duplicated for each page for simplicity, consider a shared JS file for larger apps) ---
+        const chatbotToggleButton = document.getElementById('chatbotToggleButton');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const closeChatbotButton = document.getElementById('closeChatbotButton');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSendButton = document.getElementById('chatbotSendButton');
+
+        let currentUserRole = "Student"; // This should be dynamically set based on actual user login
+
+        chatbotToggleButton.addEventListener('click', () => {
+            chatbotContainer.classList.toggle('hidden'); // Toggle visibility
+            chatbotContainer.classList.toggle('open');    // Toggle animation class
+            if (!chatbotContainer.classList.contains('hidden')) {
+                chatbotInput.focus(); // Focus input when chat opens
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
+            }
+        });
+
+        closeChatbotButton.addEventListener('click', () => {
+            chatbotContainer.classList.add('hidden');
+            chatbotContainer.classList.remove('open');
+        });
+
+        async function sendMessage() {
+            const userMessage = chatbotInput.value.trim();
+            if (userMessage === '') return;
+
+            // Add user message to chat window
+            const userBubble = document.createElement('div');
+            userBubble.className = 'message-bubble user';
+            userBubble.textContent = userMessage;
+            chatbotMessages.appendChild(userBubble);
+            chatbotInput.value = ''; // Clear input
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
+
+            // Simulate typing indicator
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message-bubble bot typing-indicator';
+            typingIndicator.textContent = 'Naledi is typing...';
+            chatbotMessages.appendChild(typingIndicator);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer dummy_token' // Use actual token
+                    },
+                    body: JSON.stringify({ user_query: userMessage, user_role: currentUserRole })
+                });
+
+                const data = await response.json();
+
+                // Remove typing indicator
+                if (chatbotMessages.contains(typingIndicator)) {
+                    chatbotMessages.removeChild(typingIndicator);
+                }
+
+                const botBubble = document.createElement('div');
+                botBubble.className = 'message-bubble bot';
+                botBubble.textContent = data.response;
+                chatbotMessages.appendChild(botBubble);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight; // Scroll to bottom
+            } catch (error) {
+                console.error('Error sending message to chatbot:', error);
+                // Remove typing indicator
+                if (chatbotMessages.contains(typingIndicator)) {
+                    chatbotMessages.removeChild(typingIndicator);
+                }
+                const errorBubble = document.createElement('div');
+                errorBubble.className = 'message-bubble bot text-red-600';
+                errorBubble.textContent = 'Sorry, Naledi is currently unavailable. Please try again later.';
+                chatbotMessages.appendChild(errorBubble);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+        }
+
+        chatbotSendButton.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Function to extract student_id from URL
+        function getStudentIdFromUrl() {
+            const pathSegments = window.location.pathname.split('/');
+            const studentIdIndex = pathSegments.indexOf('student-profile') + 1;
+            return pathSegments[studentIdIndex];
+        }
+
+        const studentId = getStudentIdFromUrl();
+        document.getElementById('studentIdDisplay').textContent = studentId;
+
+        // Function to fetch student details
+        async function fetchStudentDetails(id) {
+            try {
+                const response = await fetch(`/api/students/${id}`, {
+                    headers: { 'Authorization': 'Bearer dummy_token' } // Use your actual token
+                });
+                if (!response.ok) throw new Error('Failed to fetch student details');
+                const data = await response.json();
+                document.getElementById('studentName').textContent = data.name || 'N/A';
+                document.getElementById('studentAge').textContent = data.age || 'N/A';
+                document.getElementById('studentGrade').textContent = data.grade_level || 'N/A';
+                document.getElementById('studentGender').textContent = data.gender || 'N/A';
+                // These are placeholders; you'd need to fetch actual lookup names if IDs are stored
+                document.getElementById('studentHomeEnv').textContent = data.home_learning_environment || 'N/A';
+                document.getElementById('studentInternetAccess').textContent = data.internet_access || 'N/A';
+            } catch (error) {
+                console.error('Error fetching student details:', error);
+                document.getElementById('studentName').textContent = 'Error loading';
+            }
+        }
+
+        // Function to fetch academic records
+        async function fetchAcademicRecords(id) {
+            try {
+                const response = await fetch(`/api/students/${id}/academic_records`, {
+                    headers: { 'Authorization': 'Bearer dummy_token' }
+                });
+                if (!response.ok) throw new Error('Failed to fetch academic records');
+                const records = await response.json();
+                const tableBody = document.getElementById('academicRecordsTableBody');
+                tableBody.innerHTML = ''; // Clear existing rows
+                if (records.length > 0) {
+                    records.forEach(record => {
+                        const row = tableBody.insertRow();
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${record.subject}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${record.mark}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${record.assessment_type}</td>
+                        `;
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">No academic records found.</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error fetching academic records:', error);
+                const tableBody = document.getElementById('academicRecordsTableBody');
+                tableBody.innerHTML = '<tr><td colspan="3" class="px-6 py-4 whitespace-nowrap text-sm text-red-500">Error loading records.</td></tr>';
+            }
+        }
+
+        // Function to fetch attendance records
+        async function fetchAttendanceRecords(id) {
+            try {
+                const response = await fetch(`/api/students/${id}/attendance_records`, {
+                    headers: { 'Authorization': 'Bearer dummy_token' }
+                });
+                if (!response.ok) throw new Error('Failed to fetch attendance records');
+                const records = await response.json();
+                const tableBody = document.getElementById('attendanceRecordsTableBody');
+                tableBody.innerHTML = ''; // Clear existing rows
+                if (records.length > 0) {
+                    records.forEach(record => {
+                        const row = tableBody.insertRow();
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${record.date}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${record.status}</td>
+                        `;
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="2" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">No attendance records found.</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error fetching attendance records:', error);
+                const tableBody = document.getElementById('attendanceRecordsTableBody');
+                tableBody.innerHTML = '<tr><td colspan="2" class="px-6 py-4 whitespace-nowrap text-sm text-red-500">Error loading records.</td></tr>';
+            }
+        }
+
+        // Function to get prediction and explanation
+        document.getElementById('predictButton').addEventListener('click', async function() {
+            const predictionMessageBox = document.getElementById('predictionMessageBox');
+            predictionMessageBox.textContent = '';
+            predictionMessageBox.classList.add('hidden');
+
+            try {
+                // Get Prediction
+                const predictResponse = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer dummy_token'
+                    },
+                    body: JSON.stringify({ student_id: studentId })
+                });
+                if (!predictResponse.ok) throw new Error('Failed to get prediction');
+                const predictionData = await predictResponse.json();
+                document.getElementById('predictedMark').textContent = `${predictionData.predicted_mark.toFixed(2)}`;
+                document.getElementById('confidenceScore').textContent = `${(predictionData.confidence * 100).toFixed(2)}%`;
+                predictionMessageBox.textContent = 'Prediction successful!';
+                predictionMessageBox.className = 'text-sm mt-2 text-green-600 font-semibold';
+                predictionMessageBox.classList.remove('hidden');
+
+                // Get Explanation (SHAP values)
+                const explainResponse = await fetch('/api/explain_prediction', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer dummy_token'
+                    },
+                    body: JSON.stringify({ student_id: studentId })
+                });
+                if (!explainResponse.ok) throw new Error('Failed to get explanation');
+                const explanationData = await explainResponse.json();
+                
+                const featureImportanceDiv = document.getElementById('featureImportance');
+                featureImportanceDiv.innerHTML = ''; // Clear previous content
+
+                if (Object.keys(explanationData).length > 0) {
+                    const ul = document.createElement('ul');
+                    ul.className = 'list-disc list-inside space-y-1 text-gray-700';
+                    // Sort features by absolute SHAP value for better readability
+                    const sortedFeatures = Object.entries(explanationData).sort(([, a], [, b]) => Math.abs(b) - Math.abs(a));
+                    sortedFeatures.forEach(([feature, value]) => {
+                        const li = document.createElement('li');
+                        li.textContent = `${feature}: ${value.toFixed(4)}`;
+                        ul.appendChild(li);
+                    });
+                    featureImportanceDiv.appendChild(ul);
+                } else {
+                    featureImportanceDiv.innerHTML = '<p class="text-gray-600">No feature importance data available.</p>';
+                }
+
+            } catch (error) {
+                console.error('Error during prediction or explanation:', error);
+                document.getElementById('predictedMark').textContent = '--';
+                document.getElementById('confidenceScore').textContent = '--';
+                predictionMessageBox.textContent = `Error: ${error.message}`;
+                predictionMessageBox.className = 'text-sm mt-2 text-red-600 font-semibold';
+                predictionMessageBox.classList.remove('hidden');
+                document.getElementById('featureImportance').innerHTML = '<p class="text-gray-600">Error loading feature importance.</p>';
+            }
+        });
+
+        // Initial data load when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            if (studentId) {
+                fetchStudentDetails(studentId);
+                fetchAcademicRecords(studentId);
+                fetchAttendanceRecords(studentId);
+            } else {
+                document.getElementById('studentName').textContent = 'Invalid Student ID';
+                document.getElementById('studentIdDisplay').textContent = 'N/A';
+            }
+        });
+    </script>
+</body>
+</html>

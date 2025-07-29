@@ -1,0 +1,309 @@
+> Application console log will appear here...
+
+> Application started. Version: 2025.07.27.2
+
+> 2025-07-29 10:24:51,454 - INFO - Attempting to establish SQLAlchemy engine...
+
+> 2025-07-29 10:24:51,456 - DEBUG - Successfully read config.ini from c:\Users\AliChilambo\OneDrive - Alinatics\alinatics\Projects\Python\RISE\masters\config.ini
+
+> 2025-07-29 10:24:51,457 - DEBUG - ODBC Connection String (masked): DRIVER={ODBC Driver 17 for SQL Server};SERVER=alinatics;DATABASE=StudentMarks;UID=***;pwd=***
+
+> 2025-07-29 10:24:51,457 - INFO - Creating SQLAlchemy engine...
+
+> 2025-07-29 10:24:51,518 - INFO - Testing database connection...
+
+> 2025-07-29 10:24:52,174 - INFO - SQLAlchemy engine established and tested successfully.
+
+> 2025-07-29 10:24:52,175 - INFO - Application State Updated: db_connected=True
+
+> 2025-07-29 10:24:52,175 - INFO - Checking and creating database tables (if not exist)...
+
+> 2025-07-29 10:24:52,185 - INFO - Table gender_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,188 - INFO - Table school_type_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,191 - INFO - Table province_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,194 - INFO - Table district_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,198 - INFO - Table quintile_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,201 - INFO - Table subject_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,204 - INFO - Table academic_assessment_type_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,207 - INFO - Table attendance_status_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,209 - INFO - Table socio_economic_status_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,214 - INFO - Table home_environment_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,217 - INFO - Table internet_access_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,219 - INFO - Table study_habits_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,222 - INFO - Table extracurricular_engagement_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,227 - INFO - Table health_nutrition_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,234 - INFO - Table special_needs_support_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,236 - INFO - Table intervention_type_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,241 - INFO - Table first_names_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,249 - INFO - Table last_names_lookup already exists, skipping creation.
+
+> 2025-07-29 10:24:52,254 - INFO - Table schools already exists, skipping creation.
+
+> 2025-07-29 10:24:52,258 - INFO - Table parents already exists, skipping creation.
+
+> 2025-07-29 10:24:52,264 - INFO - Table users already exists, skipping creation.
+
+> 2025-07-29 10:24:52,268 - INFO - Table chatbot_knowledge_base already exists, skipping creation.
+
+> 2025-07-29 10:24:52,272 - INFO - Table students already exists, skipping creation.
+
+> 2025-07-29 10:24:52,275 - INFO - Table student_years already exists, skipping creation.
+
+> 2025-07-29 10:24:52,279 - INFO - Table academic_records already exists, skipping creation.
+
+> 2025-07-29 10:24:52,282 - INFO - Table attendance_records already exists, skipping creation.
+
+> 2025-07-29 10:24:52,285 - INFO - Table intervention_recommendations already exists, skipping creation.
+
+> 2025-07-29 10:24:52,285 - INFO - Checking and populating lookup tables on startup...
+
+> 2025-07-29 10:24:52,307 - INFO - Skipping existing entry in gender_lookup (gender_name): Male
+
+> 2025-07-29 10:24:52,314 - INFO - Skipping existing entry in gender_lookup (gender_name): Female
+
+> 2025-07-29 10:24:52,316 - INFO - Skipping existing entry in gender_lookup (gender_name): Other
+
+> 2025-07-29 10:24:52,322 - INFO - Skipping existing entry in school_type_lookup (type_name): Primary
+
+> 2025-07-29 10:24:52,325 - INFO - Skipping existing entry in school_type_lookup (type_name): Secondary
+
+> 2025-07-29 10:24:52,327 - INFO - Skipping existing entry in school_type_lookup (type_name): Combined
+
+> 2025-07-29 10:24:52,332 - INFO - Skipping existing entry in province_lookup (province_name): Gauteng
+
+> 2025-07-29 10:24:52,334 - INFO - Skipping existing entry in province_lookup (province_name): Western Cape
+
+> 2025-07-29 10:24:52,336 - INFO - Skipping existing entry in province_lookup (province_name): KwaZulu-Natal
+
+> 2025-07-29 10:24:52,338 - INFO - Skipping existing entry in province_lookup (province_name): Eastern Cape
+
+> 2025-07-29 10:24:52,339 - INFO - Skipping existing entry in province_lookup (province_name): Limpopo
+
+> 2025-07-29 10:24:52,341 - INFO - Skipping existing entry in province_lookup (province_name): Mpumalanga
+
+> 2025-07-29 10:24:52,342 - INFO - Skipping existing entry in province_lookup (province_name): North West
+
+> 2025-07-29 10:24:52,344 - INFO - Skipping existing entry in province_lookup (province_name): Northern Cape
+
+> 2025-07-29 10:24:52,345 - INFO - Skipping existing entry in province_lookup (province_name): Free State
+
+> 2025-07-29 10:24:52,349 - INFO - Skipping existing entry in district_lookup (district_name): Johannesburg North
+
+> 2025-07-29 10:24:52,352 - INFO - Skipping existing entry in district_lookup (district_name): Cape Winelands
+
+> 2025-07-29 10:24:52,354 - INFO - Skipping existing entry in district_lookup (district_name): eThekwini
+
+> 2025-07-29 10:24:52,355 - INFO - Skipping existing entry in district_lookup (district_name): Nelson Mandela Bay
+
+> 2025-07-29 10:24:52,356 - INFO - Skipping existing entry in district_lookup (district_name): Capricorn
+
+> 2025-07-29 10:24:52,357 - INFO - Skipping existing entry in district_lookup (district_name): Ehlanzeni
+
+> 2025-07-29 10:24:52,360 - INFO - Skipping existing entry in district_lookup (district_name): Dr Kenneth Kaunda
+
+> 2025-07-29 10:24:52,362 - INFO - Skipping existing entry in district_lookup (district_name): Frances Baard
+
+> 2025-07-29 10:24:52,365 - INFO - Skipping existing entry in district_lookup (district_name): Mangaung
+
+> 2025-07-29 10:24:52,368 - INFO - Skipping existing entry in quintile_lookup (quintile_value): 1
+
+> 2025-07-29 10:24:52,370 - INFO - Skipping existing entry in quintile_lookup (quintile_value): 2
+
+> 2025-07-29 10:24:52,371 - INFO - Skipping existing entry in quintile_lookup (quintile_value): 3
+
+> 2025-07-29 10:24:52,372 - INFO - Skipping existing entry in quintile_lookup (quintile_value): 4
+
+> 2025-07-29 10:24:52,373 - INFO - Skipping existing entry in quintile_lookup (quintile_value): 5
+
+> 2025-07-29 10:24:52,377 - INFO - Skipping existing entry in subject_lookup (subject_name): Mathematics
+
+> 2025-07-29 10:24:52,379 - INFO - Skipping existing entry in subject_lookup (subject_name): English Home Language
+
+> 2025-07-29 10:24:52,382 - INFO - Skipping existing entry in subject_lookup (subject_name): Afrikaans
+
+> 2025-07-29 10:24:52,384 - INFO - Skipping existing entry in subject_lookup (subject_name): IsiZulu
+
+> 2025-07-29 10:24:52,386 - INFO - Skipping existing entry in subject_lookup (subject_name): Physical Sciences
+
+> 2025-07-29 10:24:52,388 - INFO - Skipping existing entry in subject_lookup (subject_name): Life Sciences
+
+> 2025-07-29 10:24:52,389 - INFO - Skipping existing entry in subject_lookup (subject_name): History
+
+> 2025-07-29 10:24:52,390 - INFO - Skipping existing entry in subject_lookup (subject_name): Geography
+
+> 2025-07-29 10:24:52,393 - INFO - Skipping existing entry in subject_lookup (subject_name): Accounting
+
+> 2025-07-29 10:24:52,395 - INFO - Skipping existing entry in subject_lookup (subject_name): Business Studies
+
+> 2025-07-29 10:24:52,397 - INFO - Skipping existing entry in subject_lookup (subject_name): Computer Applications Technology
+
+> 2025-07-29 10:24:52,404 - INFO - Skipping existing entry in academic_assessment_type_lookup (type_name): Assignment
+
+> 2025-07-29 10:24:52,406 - INFO - Skipping existing entry in academic_assessment_type_lookup (type_name): Test
+
+> 2025-07-29 10:24:52,407 - INFO - Skipping existing entry in academic_assessment_type_lookup (type_name): Exam
+
+> 2025-07-29 10:24:52,410 - INFO - Skipping existing entry in academic_assessment_type_lookup (type_name): Project
+
+> 2025-07-29 10:24:52,414 - INFO - Skipping existing entry in attendance_status_lookup (status_name): Present
+
+> 2025-07-29 10:24:52,416 - INFO - Skipping existing entry in attendance_status_lookup (status_name): Absent
+
+> 2025-07-29 10:24:52,418 - INFO - Skipping existing entry in attendance_status_lookup (status_name): Late
+
+> 2025-07-29 10:24:52,423 - INFO - Skipping existing entry in socio_economic_status_lookup (status_name): Low
+
+> 2025-07-29 10:24:52,427 - INFO - Skipping existing entry in socio_economic_status_lookup (status_name): Medium
+
+> 2025-07-29 10:24:52,430 - INFO - Skipping existing entry in socio_economic_status_lookup (status_name): High
+
+> 2025-07-29 10:24:52,436 - INFO - Skipping existing entry in home_environment_lookup (environment_name): Supportive
+
+> 2025-07-29 10:24:52,440 - INFO - Skipping existing entry in home_environment_lookup (environment_name): Challenging
+
+> 2025-07-29 10:24:52,443 - INFO - Skipping existing entry in home_environment_lookup (environment_name): Neutral
+
+> 2025-07-29 10:24:52,448 - INFO - Skipping existing entry in internet_access_lookup (access_type): No Access
+
+> 2025-07-29 10:24:52,451 - INFO - Skipping existing entry in internet_access_lookup (access_type): Limited Access
+
+> 2025-07-29 10:24:52,453 - INFO - Skipping existing entry in internet_access_lookup (access_type): Reliable Access
+
+> 2025-07-29 10:24:52,461 - INFO - Skipping existing entry in study_habits_lookup (habit_name): Excellent
+
+> 2025-07-29 10:24:52,465 - INFO - Skipping existing entry in study_habits_lookup (habit_name): Good
+
+> 2025-07-29 10:24:52,469 - INFO - Skipping existing entry in study_habits_lookup (habit_name): Average
+
+> 2025-07-29 10:24:52,475 - INFO - Skipping existing entry in study_habits_lookup (habit_name): Poor
+
+> 2025-07-29 10:24:52,483 - INFO - Skipping existing entry in extracurricular_engagement_lookup (engagement_type): High
+
+> 2025-07-29 10:24:52,487 - INFO - Skipping existing entry in extracurricular_engagement_lookup (engagement_type): Medium
+
+> 2025-07-29 10:24:52,493 - INFO - Skipping existing entry in extracurricular_engagement_lookup (engagement_type): Low
+
+> 2025-07-29 10:24:52,499 - INFO - Skipping existing entry in extracurricular_engagement_lookup (engagement_type): None
+
+> 2025-07-29 10:24:52,507 - INFO - Skipping existing entry in health_nutrition_lookup (status_name): Good
+
+> 2025-07-29 10:24:52,514 - INFO - Skipping existing entry in health_nutrition_lookup (status_name): Average
+
+> 2025-07-29 10:24:52,516 - INFO - Skipping existing entry in health_nutrition_lookup (status_name): Poor
+
+> 2025-07-29 10:24:52,524 - INFO - Skipping existing entry in special_needs_support_lookup (support_type): Yes
+
+> 2025-07-29 10:24:52,529 - INFO - Skipping existing entry in special_needs_support_lookup (support_type): No
+
+> 2025-07-29 10:24:52,536 - INFO - Skipping existing entry in intervention_type_lookup (type_name): Academic Support
+
+> 2025-07-29 10:24:52,541 - INFO - Skipping existing entry in intervention_type_lookup (type_name): Behavioral Intervention
+
+> 2025-07-29 10:24:52,547 - INFO - Skipping existing entry in intervention_type_lookup (type_name): Health Support
+
+> 2025-07-29 10:24:52,552 - INFO - Skipping existing entry in intervention_type_lookup (type_name): Counseling
+
+> 2025-07-29 10:24:52,558 - INFO - Skipping existing entry in first_names_lookup (first_name): Alice
+
+> 2025-07-29 10:24:52,564 - INFO - Skipping existing entry in first_names_lookup (first_name): Bob
+
+> 2025-07-29 10:24:52,570 - INFO - Skipping existing entry in first_names_lookup (first_name): Charlie
+
+> 2025-07-29 10:24:52,573 - INFO - Skipping existing entry in first_names_lookup (first_name): Diana
+
+> 2025-07-29 10:24:52,575 - INFO - Skipping existing entry in first_names_lookup (first_name): Eve
+
+> 2025-07-29 10:24:52,582 - INFO - Skipping existing entry in first_names_lookup (first_name): Frank
+
+> 2025-07-29 10:24:52,585 - INFO - Skipping existing entry in first_names_lookup (first_name): Grace
+
+> 2025-07-29 10:24:52,587 - INFO - Skipping existing entry in first_names_lookup (first_name): Heidi
+
+> 2025-07-29 10:24:52,590 - INFO - Skipping existing entry in first_names_lookup (first_name): Nomusa
+
+> 2025-07-29 10:24:52,591 - INFO - Skipping existing entry in first_names_lookup (first_name): Sipho
+
+> 2025-07-29 10:24:52,593 - INFO - Skipping existing entry in first_names_lookup (first_name): Thandi
+
+> 2025-07-29 10:24:52,597 - INFO - Skipping existing entry in first_names_lookup (first_name): Lebo
+
+> 2025-07-29 10:24:52,599 - INFO - Skipping existing entry in first_names_lookup (first_name): Khaya
+
+> 2025-07-29 10:24:52,600 - INFO - Skipping existing entry in first_names_lookup (first_name): Zodwa
+
+> 2025-07-29 10:24:52,603 - INFO - Skipping existing entry in first_names_lookup (first_name): Bongani
+
+> 2025-07-29 10:24:52,605 - INFO - Skipping existing entry in first_names_lookup (first_name): Ayanda
+
+> 2025-07-29 10:24:52,609 - INFO - Skipping existing entry in last_names_lookup (last_name): Smith
+
+> 2025-07-29 10:24:52,611 - INFO - Skipping existing entry in last_names_lookup (last_name): Jones
+
+> 2025-07-29 10:24:52,615 - INFO - Skipping existing entry in last_names_lookup (last_name): Williams
+
+> 2025-07-29 10:24:52,616 - INFO - Skipping existing entry in last_names_lookup (last_name): Brown
+
+> 2025-07-29 10:24:52,618 - INFO - Skipping existing entry in last_names_lookup (last_name): Davis
+
+> 2025-07-29 10:24:52,621 - INFO - Skipping existing entry in last_names_lookup (last_name): Miller
+
+> 2025-07-29 10:24:52,622 - INFO - Skipping existing entry in last_names_lookup (last_name): Wilson
+
+> 2025-07-29 10:24:52,624 - INFO - Skipping existing entry in last_names_lookup (last_name): Moore
+
+> 2025-07-29 10:24:52,629 - INFO - Skipping existing entry in last_names_lookup (last_name): Dlamini
+
+> 2025-07-29 10:24:52,632 - INFO - Skipping existing entry in last_names_lookup (last_name): Zulu
+
+> 2025-07-29 10:24:52,634 - INFO - Skipping existing entry in last_names_lookup (last_name): Mokoena
+
+> 2025-07-29 10:24:52,635 - INFO - Skipping existing entry in last_names_lookup (last_name): Khumalo
+
+> 2025-07-29 10:24:52,637 - INFO - Skipping existing entry in last_names_lookup (last_name): Nxumalo
+
+> 2025-07-29 10:24:52,638 - INFO - Skipping existing entry in last_names_lookup (last_name): Sithole
+
+> 2025-07-29 10:24:52,639 - INFO - Skipping existing entry in last_names_lookup (last_name): Ndlovu
+
+> 2025-07-29 10:24:52,640 - INFO - Skipping existing entry in last_names_lookup (last_name): Gumede
+
+> 2025-07-29 10:24:52,641 - INFO - Checking chatbot knowledge base status...
+
+> 2025-07-29 10:24:52,648 - INFO - Chatbot knowledge base has 20 entries and is ready.
+
+> 2025-07-29 10:24:52,656 - INFO - Default admin user 'admin_rise' already exists.
+
+> 2025-07-29 10:24:52,658 - INFO - Found 1 user(s) in the database.
+
+> 2025-07-29 10:24:52,713 - WARNING - Model pipeline file not found.
+
+> 2025-07-29 10:24:52,713 - INFO - Database initialization and setup complete.
+
+> 2025-07-29 10:26:59,662 - DEBUG - Attempting login with username: 'admin_rise'
+
+> 2025-07-29 10:26:59,663 - DEBUG - Received password (raw): 'M@Rych1n!bM0h9s0z!'
+
+> 2025-07-29 10:26:59,701 - DEBUG - Stored password (raw from DB): 'M@Rych1n!bM0h9s0z!'
+
+> 2025-07-29 10:26:59,701 - DEBUG - Stored password (cleaned for comparison): 'M@Rych1n!bM0h9s0z!'
+
+> 2025-07-29 10:26:59,702 - INFO - User 'admin_rise' logged in successfully as 'admin'.
+
+> Error populating schools: Unauthorized

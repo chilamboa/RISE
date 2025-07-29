@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RISE - Results Intelligence & Student Evaluation system">
+    <title>RISE - {% block title %}Uplifting and Growth-Oriented{% endblock %}</title>
+    <!-- Modern Tailwind CSS integration -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <!-- Google Fonts - Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome with optimized loading -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary: 107, 70, 193; /* #6B46C1 */
+            --primary-dark: 138, 43, 226; /* #8A2BE2 */
+            --surface: 255, 255, 255;
+            --surface-content: 17, 24, 39;
+            --surface-muted: 107, 114, 128;
+            --brand-gradient: linear-gradient(to right, rgb(var(--primary)), rgb(var(--primary-dark)));
+        }
+        
+        .dark {
+            --surface: 30, 41, 59;
+            --surface-content: 248, 250, 252;
+            --surface-muted: 148, 163, 184;
+        }
+        
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: rgb(240, 242, 245);
+            color: rgb(var(--surface-content));
+        }
+        
+        .header-bg {
+            background: var(--brand-gradient);
+        }
+        
+        .sidebar-bg {
+            background: var(--brand-gradient);
+        }
+        
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            border-radius: 0.375rem;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+        }
+        
+        /* Modern chatbot styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 22rem;
+            max-width: calc(100vw - 3rem);
+            height: 32rem;
+            max-height: calc(100vh - 6rem);
+            background-color: rgb(var(--surface));
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 50;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: scale(0.95);
+            opacity: 0;
+            pointer-events: none;
+            border: 1px solid rgba(var(--surface-muted), 0.1);
+        }
+        
+        .chatbot-container.open {
+            transform: scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .chatbot-header {
+            background: var(--brand-gradient);
+            color: white;
+            padding: 1rem;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            background-color: rgba(var(--surface), 0.8);
+            display: flex;
+            flex-direction: column;
+            scroll-behavior: smooth;
+        }
+        
+        .chatbot-input-area {
+            padding: 1rem;
+            border-top: 1px solid rgba(var(--surface-muted), 0.2);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .message-bubble {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 0.75rem;
+            word-wrap: break-word;
+            line-height: 1.5;
+        }
+        
+        .message-bubble.user {
+            background-color: #e0f2fe;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 0.25rem;
+        }
+        
+        .message-bubble.bot {
+            background-color: #f3e8ff;
+            align-self: flex-start;
+            margin-right: auto;
+            border-bottom-left-radius: 0.25rem;
+        }
+        
+        .chatbot-toggle-button {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            background: var(--brand-gradient);
+            color: white;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            z-index: 40;
+            transition: transform 0.2s ease-in-out;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chatbot-toggle-button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Dark mode toggle button styles */
+        .theme-toggle {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 9999px;
+            padding: 0.25rem;
+            cursor: pointer;
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 640px) {
+            .chatbot-container {
+                width: 100%;
+                height: 100%;
+                max-height: 100%;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+                transform-origin: bottom right;
+            }
+            
+            .chatbot-toggle-button {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        /* Loading indicator for API responses */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+        }
+        
+        .typing-indicator::after {
+            content: "...";
+            width: 1.25em;
+            overflow: hidden;
+            display: inline-block;
+            animation: ellipsis 1.4s steps(4) infinite;
+        }
+        
+        @keyframes ellipsis {
+            to {
+                width: 0;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+    <!-- Header (mobile only) -->
+    <header class="header-bg text-white p-4 flex items-center justify-between lg:hidden rounded-b-lg shadow-md">
+        <div>
+            <h1 class="text-2xl font-extrabold leading-none">RISE</h1>
+            <p class="text-sm mt-1 font-medium opacity-90">Results Intelligence & Student Evaluation</p>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button id="themeToggle" class="theme-toggle p-1" aria-label="Toggle dark mode">
+                <i class="fas fa-moon text-white text-sm"></i>
+            </button>
+            <button id="menuButton" class="text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-purple-700 rounded-md p-1" aria-label="Toggle menu">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar-bg text-white w-72 space-y-6 py-7 px-4 absolute inset-y-0 left-0 transform -translate-x-full lg:relative lg:translate-x-0 transition duration-200 ease-in-out z-30 rounded-r-lg shadow-lg h-screen overflow-y-auto">
+        <div class="flex items-center justify-center mb-8">
+            <div class="text-center">
+                <h1 class="text-3xl font-extrabold leading-none">RISE</h1>
+                <p class="text-lg mt-1 font-medium">Results Intelligence & Student Evaluation</p>
+                <p class="text-sm mt-1 font-light opacity-80">Uplifting and growth-oriented</p>
+            </div>
+        </div>
+
+        <nav class="space-y-1.5">
+            <a href="/dashboard" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-home w-6"></i><span class="ml-3">Dashboard</span></a>
+            <a href="/student-profile/S001" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-user-graduate w-6"></i><span class="ml-3">Student Profile (S001)</span></a>
+            <a href="/student-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-users w-6"></i><span class="ml-3">Student Management</span></a>
+            <a href="/reports" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-chart-line w-6"></i><span class="ml-3">Reports & Analytics</span></a>
+            <a href="/interventions-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-hands-helping w-6"></i><span class="ml-3">Interventions</span></a>
+            <a href="/chatbot" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-robot w-6"></i><span class="ml-3">Naledi Chatbot</span></a>
+            <a href="/user-management" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-user-cog w-6"></i><span class="ml-3">User Management</span></a>
+            <a href="/settings" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-cog w-6"></i><span class="ml-3">Settings</span></a>
+            <a href="/about" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-info-circle w-6"></i><span class="ml-3">About</span></a>
+            <a href="/privacy-policy" class="block py-2.5 px-4 rounded-md text-white nav-link"><i class="fas fa-shield-alt w-6"></i><span class="ml-3">Privacy Policy</span></a>
+        </nav>
+        
+        <div class="mt-auto pt-6">
+            <button id="logoutButton" class="block w-full text-left py-2.5 px-4 rounded-md text-white nav-link">
+                <i class="fas fa-sign-out-alt w-6"></i><span class="ml-3">Logout</span>
+            </button>
+        </div>
+        
+        <div class="flex justify-center mt-4 pt-4 border-t border-white/20">
+            <button id="sidebarThemeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-sun text-white text-sm px-2 py-1"></i>
+                <i class="fas fa-moon text-white text-sm px-2 py-1"></i>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Nav (desktop only) -->
+        <header class="header-bg text-white p-4 hidden lg:flex items-center justify-between shadow-md rounded-bl-lg">
+            <div class="flex-grow"></div>
+            <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-2">
+                    <button id="notificationsButton" class="text-white focus:outline-none hover:bg-white/10 p-1 rounded-full" aria-label="Notifications">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button id="desktopThemeToggle" class="text-white focus:outline-none hover:bg-white/10 p-1 rounded-full" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                        <i class="fas fa-user text-sm"></i>
+                    </div>
+                    <span class="text-base font-medium">Welcome, <span class="font-semibold">User</span>!</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 dark:bg-slate-900 p-4 md:p-6 transition-colors duration-300">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Chatbot Toggle Button -->
+    <div id="chatbotToggleButton" class="chatbot-toggle-button" aria-label="Open chat assistant">
+        <i class="fas fa-comment-dots"></i>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div id="chatbotContainer" class="chatbot-container hidden">
+        <div class="chatbot-header">
+            <h3 class="text-lg font-semibold">Naledi Chatbot</h3>
+            <button id="closeChatbotButton" class="text-white focus:outline-none hover:bg-white/10 p-1 rounded-full" aria-label="Close chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="chatbotMessages" class="chatbot-messages flex flex-col">
+            <!-- Chat messages appear here -->
+            <div class="message-bubble bot fade-in">
+                Hello! I'm Naledi, your AI assistant. How can I help you today?
+            </div>
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" id="chatbotInput" placeholder="Type your message..."
+                   class="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-slate-800 dark:text-white transition-colors duration-300">
+            <button id="chatbotSendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md font-semibold transition-colors">
+                Send
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar for mobile
+        const menuButton = document.getElementById('menuButton');
+        const sidebar = document.getElementById('sidebar');
+
+        menuButton.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        // Close sidebar when clicking outside on small screens
+        document.addEventListener('click', (event) => {
+            if (!sidebar.contains(event.target) && !menuButton.contains(event.target) && window.innerWidth < 1024) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        // Logout functionality
+        document.getElementById('logoutButton').addEventListener('click', function() {
+            // Add confirmation if needed
+            window.location.href = '/';
+        });
+
+        // Dark mode toggle functionality
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+            
+            // Update icons
+            const sunIcons = document.querySelectorAll('.fa-sun');
+            const moonIcons = document.querySelectorAll('.fa-moon');
+            
+            sunIcons.forEach(icon => icon.parentElement.classList.toggle('hidden'));
+            moonIcons.forEach(icon => icon.parentElement.classList.toggle('hidden'));
+        }
+        
+        // Check for saved theme preference or prefer-color-scheme
+        if (localStorage.getItem('darkMode') === 'true' || 
+            (window.matchMedia('(prefers-color-scheme: dark)').matches && 
+             localStorage.getItem('darkMode') === null)) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        // Add event listeners to theme toggles
+        document.querySelectorAll('#themeToggle, #sidebarThemeToggle, #desktopThemeToggle')
+            .forEach(button => {
+                button.addEventListener('click', toggleDarkMode);
+            });
+        
+        // Set initial icon state
+        const isDark = document.documentElement.classList.contains('dark');
+        document.querySelectorAll('.fa-sun').forEach(icon => {
+            if (isDark) icon.parentElement.classList.add('hidden');
+        });
+        document.querySelectorAll('.fa-moon').forEach(icon => {
+            if (!isDark) icon.parentElement.classList.add('hidden');
+        });
+
+        // Active link highlighting
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname;
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const href = link.getAttribute('href');
+                if (currentPath === href || 
+                    (href !== '/' && currentPath.startsWith(href))) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // --- Chatbot Functionality ---
+        const chatbotToggleButton = document.getElementById('chatbotToggleButton');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const closeChatbotButton = document.getElementById('closeChatbotButton');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSendButton = document.getElementById('chatbotSendButton');
+
+        // This variable will be set by individual pages if needed
+        let currentUserRole = "Student"; 
+
+        chatbotToggleButton.addEventListener('click', () => {
+            chatbotContainer.classList.toggle('hidden');
+            chatbotContainer.classList.toggle('open');
+            if (!chatbotContainer.classList.contains('hidden')) {
+                chatbotInput.focus();
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+        });
+
+        closeChatbotButton.addEventListener('click', () => {
+            chatbotContainer.classList.add('hidden');
+            chatbotContainer.classList.remove('open');
+        });
+
+        async function sendMessage() {
+            const userMessage = chatbotInput.value.trim();
+            if (userMessage === '') return;
+
+            const userBubble = document.createElement('div');
+            userBubble.className = 'message-bubble user fade-in';
+            userBubble.textContent = userMessage;
+            chatbotMessages.appendChild(userBubble);
+            chatbotInput.value = '';
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message-bubble bot typing-indicator fade-in';
+            typingIndicator.textContent = 'Naledi is typing';
+            chatbotMessages.appendChild(typingIndicator);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+
+            try {
+                const response = await fetch('/api/chatbot', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer dummy_token'
+                    },
+                    body: JSON.stringify({ user_query: userMessage, user_role: currentUserRole })
+                });
+
+                const data = await response.json();
+
+                chatbotMessages.removeChild(typingIndicator);
+
+                const botBubble = document.createElement('div');
+                botBubble.className = 'message-bubble bot fade-in';
+                botBubble.textContent = data.response;
+                chatbotMessages.appendChild(botBubble);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            } catch (error) {
+                console.error('Error sending message to chatbot:', error);
+                if (chatbotMessages.contains(typingIndicator)) {
+                    chatbotMessages.removeChild(typingIndicator);
+                }
+                const errorBubble = document.createElement('div');
+                errorBubble.className = 'message-bubble bot text-red-600 fade-in';
+                errorBubble.textContent = 'Sorry, Naledi is currently unavailable. Please try again later.';
+                chatbotMessages.appendChild(errorBubble);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+        }
+
+        chatbotSendButton.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

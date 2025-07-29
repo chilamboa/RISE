@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE - Login</title>
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <style>
+        /* CSS Variables for easy theming */
+        :root {
+            --primary: 99, 102, 241; /* Indigo 500 */
+            --primary-dark: 79, 70, 229; /* Indigo 600 */
+            --surface: 255, 255, 255; /* White */
+            --surface-content: 15, 23, 42; /* Slate 900 */
+            --surface-muted: 100, 116, 139; /* Slate 500 */
+            --success: 16, 185, 129; /* Emerald 500 */
+            --error: 239, 68, 68; /* Red 500 */
+            --brand-gradient: linear-gradient(to right, rgb(var(--primary)), rgb(var(--primary-dark)));
+        }
+
+        .dark {
+            --surface: 30, 41, 59; /* Slate 800 */
+            --surface-content: 248, 250, 252; /* Slate 50 */
+            --surface-muted: 148, 163, 184; /* Slate 400 */
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: rgb(240, 242, 245); /* slate-100 equivalent */
+            color: rgb(var(--surface-content));
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 2rem;
+            background-color: rgb(var(--surface));
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--brand-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin-bottom: 0.5rem;
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: rgb(var(--surface-muted));
+            margin-bottom: 2rem;
+            font-size: 1rem; /* text-base */
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500; /* font-medium */
+            color: rgb(var(--surface-content));
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgb(var(--surface-muted));
+            border-radius: 6px;
+            background-color: rgb(var(--surface));
+            color: rgb(var(--surface-content));
+            font-size: 1rem;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-sizing: border-box; /* Include padding/border in width */
+        }
+
+        input:focus {
+            outline: none;
+            border-color: rgb(var(--primary));
+            box-shadow: 0 0 0 3px rgba(var(--primary), 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--brand-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .message-box {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 0.875rem; /* text-sm */
+            display: none; /* Hidden by default */
+        }
+
+        .message-box.success {
+            background-color: rgba(var(--success), 0.1);
+            color: rgb(var(--success));
+            border: 1px solid rgb(var(--success));
+            display: block; /* Show when success class is added */
+        }
+
+        .message-box.error {
+            background-color: rgba(var(--error), 0.1);
+            color: rgb(var(--error));
+            border: 1px solid rgb(var(--error));
+            display: block; /* Show when error class is added */
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container fade-in">
+        <div class="logo">RISE</div>
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Sign in to your RISE account</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required autocomplete="current-password">
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+        <!-- Message box for displaying login status -->
+        <div id="loginMessageBox" class="message-box"></div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageBox = document.getElementById('loginMessageBox');
+
+            // Clear previous messages
+            messageBox.innerHTML = '';
+            messageBox.className = 'message-box'; // Reset classes
+
+            try {
+                // --- CORRECTED FETCH CALL ---
+                // 1. URL changed from '/login' to '/api/login'
+                // 2. Content-Type changed to 'application/json'
+                // 3. Body changed to JSON.stringify({ username, password })
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json', // Send as JSON
+                    },
+                    body: JSON.stringify({ username: username, password: password }) // Send JSON data
+                });
+                // --- END OF CORRECTIONS ---
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    messageBox.classList.add('success');
+                    messageBox.textContent = 'Login successful! Redirecting...';
+
+                    // Redirect on successful login
+                    setTimeout(() => {
+                        window.location.href = data.redirect; // Should be /admin_dashboard
+                    }, 1000); // Redirect after 1 second
+
+                } else {
+                    // Handle server-side errors or unsuccessful login attempts
+                    messageBox.classList.add('error');
+                    // Use the message from the server, or a default one
+                    messageBox.textContent = data.message || 'An error occurred during login.';
+                }
+            } catch (error) {
+                // Handle network errors or unexpected issues
+                console.error('Login error:', error);
+                messageBox.classList.add('error');
+                messageBox.textContent = 'An unexpected error occurred. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>

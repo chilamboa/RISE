@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Data Generation Panel</title>
+    <style>
+        /* Basic Reset & Body Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top to prevent cards from being centered vertically on short screens */
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Container for all cards */
+      .container {
+            display: flex;
+            flex-wrap: wrap; /* Allows cards to wrap to the next line */
+            gap: 20px; /* Space between cards */
+            max-width: 1200px; /* Max width for the layout */
+            justify-content: center; /* Center cards horizontally */
+        }
+
+        /* Individual Card Styling */
+      .card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            width: 300px; /* Fixed width for the smaller generation cards */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Pushes header/content/actions apart */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        /* Full-width card for "Generate All Data" */
+      .card.full-width {
+            width: 940px; /* (3 * 300px card width) + (2 * 20px gap) = 940px */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center content horizontally within this card */
+            justify-content: center;
+        }
+
+        /* Card Header Section */
+      .card-header {
+            margin-bottom: 20px;
+        }
+      .card-header img {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+      .card-header h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #333;
+        }
+      .card-header p {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+            min-height: 40px; /* Ensures consistent height for descriptions */
+        }
+
+        /* Card Actions (buttons and inputs) */
+      .card-actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Button Styling */
+      .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+      .button.purple {
+            background-color: #8a2be2; /* Matches Image 1 'Populate Schools' button */
+            color: white;
+        }
+      .button.purple:hover {
+            background-color: #7a1bd1;
+        }
+      .button.blue {
+            background-color: #4285f4; /* Matches Image 1 'Generate Parents' button */
+            color: white;
+        }
+      .button.blue:hover {
+            background-color: #3367d6;
+        }
+      .button.green {
+            background-color: #0f9d58; /* Matches Image 1 'Enroll Students' button */
+            color: white;
+        }
+      .button.green:hover {
+            background-color: #0b7e46;
+        }
+      .button.grey { /* For disabled or non-interactive buttons */
+            background-color: #e0e0e0;
+            color: #555;
+            cursor: default;
+        }
+      .button.grey:hover {
+            background-color: #d0d0d0;
+        }
+
+        /* Input Field Styling */
+      .input-field {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1em;
+            text-align: center;
+        }
+
+        /* Generate All Data Section Specifics */
+      .generate-all-data-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.1em;
+            color: #333;
+        }
+      .generate-all-data-section div {
+            display: flex;
+            gap: 30px; /* Space between Schools, Parents, Students labels */
+        }
+      .generate-all-data-section span {
+            font-weight: bold;
+            color: #0f9d58; /* Green for numbers, similar to Image 2 */
+        }
+      .generate-all-button {
+            background-color: #8a2be2; /* Matches Image 2 'Generate All' button */
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1.1em;
+            margin-top: 20px;
+        }
+      .generate-all-button:hover {
+            background-color: #7a1bd1;
+        }
+
+        /* Status and Error Messages */
+      .status-message {
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #0f9d58; /* Success color */
+            font-weight: bold;
+        }
+      .error-message {
+            color: #d9534f; /* Error color */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <img src="https://www.gstatic.com/images/icons/material/system/2x/school_purple_48dp.png" alt="Populate Schools Icon">
+                <h2>Populate Schools</h2>
+                <p>Create diverse school entities and their basic information for your database.</p>
+            </div>
+            <div class="card-actions">
+                <button class="button purple" onclick="handleGenerateClick('schools')">Generate</button>
+                <input type="number" id="numSchoolsInput" name="NUM_SCHOOLS" class="input-field" value="12">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <img src="https://www.gstatic.com/images/icons/material/system/2x/people_blue_48dp.png" alt="Generate Parents Icon">
+                <h2>Generate Parents</h2>
+                <p>Create parent profiles and establish relationships with student records.</p>
+            </div>
+            <div class="card-actions">
+                <button class="button blue" onclick="handleGenerateClick('parents')">Generate</button>
+                <input type="number" id="numParentsInput" name="NUM_PARENTS" class="input-field" value="300">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <img src="https://www.gstatic.com/images/icons/material/system/2x/school_green_48dp.png" alt="Enroll Students Icon">
+                <h2>Enroll Students</h2>
+                <p>Generate student records and assign them to schools and classes.</p>
+            </div>
+            <div class="card-actions">
+                <button class="button green" onclick="handleGenerateClick('students')">Generate</button>
+                <input type="number" id="totalStudentsInput" name="TOTAL_UNIQUE_STUDENTS" class="input-field" value="1100">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <img src="https://www.gstatic.com/images/icons/material/system/2x/history_edu_grey_48dp.png" alt="Assign Academic History Icon">
+                <h2>Assign Academic History</h2>
+                <p>Generate and assign academic records to enrolled students.</p>
+            </div>
+            <div class="card-actions">
+                <button class="button purple" onclick="handleGenerateClick('academicHistory')">Generate</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <img src="https://www.gstatic.com/images/icons/material/system/2x/event_available_grey_48dp.png" alt="Generate Attendance Icon">
+                <h2>Generate Attendance</h2>
+                <p>Generate attendance records for students based on their enrollment.</p>
+            </div>
+            <div class="card-actions">
+                <button class="button blue" onclick="handleGenerateClick('attendance')">Generate</button>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <div class="card-header">
+                <img src="https://www.gstatic.com/images/icons/material/system/2x/database_purple_48dp.png" alt="Generate All Data Icon">
+                <h2>Generate All Data</h2>
+                <p>Clear existing data and generate all datasets from scratch.</p>
+            </div>
+            <div class="generate-all-data-section">
+                <div>
+                    Schools: <span id="displaySchools">10000</span>
+                    Parents: <span id="displayParents">300000</span>
+                    Students: <span id="displayStudents">10000000</span>
+                </div>
+                <button class="button generate-all-button" onclick="handleGenerateAllClick()">Generate All</button>
+            </div>
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Base URL for your backend API. Adjust if your API is hosted differently.
+        const API_BASE_URL = '/api'; 
+
+        /**
+         * Fetches the current configuration from the backend and updates the UI.
+         * This function is called on page load and after any config update.
+         */
+        async function fetchAndDisplayConfig() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/config`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const config = await response.json();
+                console.log('Fetched config:', config);
+
+                // Update individual input fields with values from DATA_GENERATION section
+                document.getElementById('numSchoolsInput').value = config.DATA_GENERATION.NUM_SCHOOLS;
+                document.getElementById('numParentsInput').value = config.DATA_GENERATION.NUM_PARENTS;
+                document.getElementById('totalStudentsInput').value = config.DATA_GENERATION.TOTAL_UNIQUE_STUDENTS;
+
+                // Update 'Generate All Data' display with values from GENERATE_ALL_DATA section
+                document.getElementById('displaySchools').textContent = config.GENERATE_ALL_DATA.SCHOOLS;
+                document.getElementById('displayParents').textContent = config.GENERATE_ALL_DATA.PARENTS;
+                document.getElementById('displayStudents').textContent = config.GENERATE_ALL_DATA.STUDENTS;
+
+                displayStatusMessage('Configuration loaded successfully.', false);
+
+            } catch (error) {
+                console.error('Error fetching configuration:', error);
+                displayStatusMessage(`Error loading configuration: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * Handles changes in the individual number input fields.
+         * Sends the updated value to the backend to persist in config.ini.
+         * Then, refreshes the UI to reflect the change.
+         */
+        async function handleInputChange(event) {
+            const inputElement = event.target;
+            const section = 'DATA_GENERATION'; // All these inputs belong to DATA_GENERATION section
+            const key = inputElement.name; // e.g., 'NUM_SCHOOLS'
+            const value = parseInt(inputElement.value, 10); // Convert input value to integer
+
+            if (isNaN(value)) {
+                displayStatusMessage('Please enter a valid number.', true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/config/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ section, key, value })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const updatedConfig = await response.json(); // Backend should return the updated config
+                console.log('Config updated:', updatedConfig);
+
+                // Re-fetch and display all config to ensure consistency across UI,
+                // especially for the 'Generate All Data' section.
+                await fetchAndDisplayConfig();
+                displayStatusMessage(`${key} updated successfully.`, false);
+
+            } catch (error) {
+                console.error('Error updating configuration:', error);
+                displayStatusMessage(`Error updating ${key}: ${error.message}`, true);
+            }
+        }
+
+        // Attach event listeners to the input fields for 'change' event
+        document.getElementById('numSchoolsInput').addEventListener('change', handleInputChange);
+        document.getElementById('numParentsInput').addEventListener('change', handleInputChange);
+        document.getElementById('totalStudentsInput').addEventListener('change', handleInputChange);
+
+        /**
+         * Handles clicks on the individual "Generate" buttons.
+         * Triggers the corresponding data generation process on the backend.
+         * @param {string} type - The type of data to generate (e.g., 'schools', 'parents', 'students', 'academicHistory', 'attendance').
+         */
+        async function handleGenerateClick(type) {
+            displayStatusMessage(`Generating ${type}...`, false);
+            try {
+                const response = await fetch(`${API_BASE_URL}/generate/${type}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json(); // Assuming backend returns a success message or data
+                console.log(`Generate ${type} result:`, result);
+                displayStatusMessage(`${type} generation complete!`, false);
+
+            } catch (error) {
+                console.error(`Error generating ${type}:`, error);
+                displayStatusMessage(`Error generating ${type}: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * Handles clicks on the "Generate All Data" button.
+         * Triggers the full data generation process on the backend (clearing and regenerating all).
+         */
+        async function handleGenerateAllClick() {
+            displayStatusMessage('Clearing existing data and generating all datasets...', false);
+            try {
+                const response = await fetch(`${API_BASE_URL}/generate/all`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json(); // Assuming backend returns a success message or data
+                console.log('Generate All Data result: ', result);
+                displayStatusMessage('All data generated successfully!', false);
+
+            } catch (error) {
+                console.error('Error generating all data:', error);
+                displayStatusMessage(`Error generating all data: ${error.message}`, true);
+            }
+        }
+
+        /**
+         * Displays a status or error message to the user in the dedicated message area.
+         * The message will automatically clear after 5 seconds.
+         * @param {string} message - The message to display.
+         * @param {boolean} isError - True if it's an error message, false for status/success.
+         */
+        function displayStatusMessage(message, isError) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            if (isError) {
+                statusDiv.classList.add('error-message');
+                statusDiv.classList.remove('status-message');
+            } else {
+                statusDiv.classList.remove('error-message');
+                statusDiv.classList.add('status-message');
+            }
+            // Clear message after a few seconds
+            setTimeout(() => {
+                statusDiv.textContent = '';
+                statusDiv.classList.remove('error-message', 'status-message');
+            }, 5000);
+        }
+
+        // Fetch configuration when the page finishes loading
+        document.addEventListener('DOMContentLoaded', fetchAndDisplayConfig);
+    </script>
+</body>
+</html>
